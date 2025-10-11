@@ -1,0 +1,192 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-section {
+  text-align: center;
+  padding: 3rem 0;
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.1), rgba(97, 218, 251, 0.1));
+  margin-bottom: 3rem;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  height: 4em;
+  padding: 1em;
+  will-change: filter;
+  transition: filter 300ms, transform 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+  transform: scale(1.05);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo.react {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.subtitle {
+  color: #888;
+  font-size: 1.2em;
+  margin-top: 0.5rem;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 300ms, box-shadow 300ms;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #646cff;
+}
+
+.counter-section {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.counter-button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #646cff;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s;
+  min-width: 120px;
+}
+
+.counter-button:hover {
+  background-color: #535bf2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+}
+
+.counter-button.secondary {
+  background-color: transparent;
+  border-color: #646cff;
+  color: #646cff;
+}
+
+.counter-button.secondary:hover {
+  background-color: #646cff;
+  color: white;
+}
+
+.links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.links a {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(100, 108, 255, 0.1);
+  transition: background 0.25s;
+}
+
+.links a:hover {
+  background: rgba(100, 108, 255, 0.2);
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.feature-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+@media (prefers-color-scheme: light) {
+  .feature-card {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .feature-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .links a {
+    background: rgba(100, 108, 255, 0.1);
+  }
+  
+  .links a:hover {
+    background: rgba(100, 108, 255, 0.2);
+  }
+  
+  code {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
