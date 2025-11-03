@@ -13,8 +13,8 @@ export default function DesignXStudentLanding() {
   const eventDate = useMemo(() => {
     // Next cohort info (IST)
     return {
-      start: "Nov 10, 2025",
-      end: "Feb 09, 2026",
+      start: "Nov 27, 2025",
+      end: "Feb 19, 2026",
       duration: "12 weeks",
       weekdayBatch: "Mon–Fri, 7–9 PM IST",
       weekendBatch: "Sat–Sun, 10 AM–12 PM IST",
