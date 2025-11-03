@@ -1,5 +1,5 @@
-import React from "react"
 import { useMemo, useState } from "react"
+import CurvedLoop from "./components/CurvedLoop"
 
 // ===== Notes =====
 // • Drop this file into any Vite/Next/CRA project with Tailwind.
@@ -9,7 +9,7 @@ import { useMemo, useState } from "react"
 // • Form posts to a dummy endpoint; hook it to HubSpot/Forms/Razorpay/etc.
 
 export default function DesignXStudentLanding() {
-  const [pricePlan, setPricePlan] = useState("full")
+  const [pricePlan, setPricePlan] = useState<"full" | "emi">("full")
   const eventDate = useMemo(() => {
     // Next cohort info (IST)
     return {
@@ -251,7 +251,7 @@ export default function DesignXStudentLanding() {
             <div id="apply" className="rounded-3xl border border-white/10 bg-neutral-900 p-6 lg:p-8">
               <h3 className="text-2xl font-bold">Apply for the {eventDate.start} cohort</h3>
               <p className="text-white/70 mt-1 text-sm">{eventDate.duration} • {eventDate.weekdayBatch} • {eventDate.weekendBatch}</p>
-              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={(e)=>{e.preventDefault(); alert('Thanks! We\'ll reach out in 24 hours.')}}>
+              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={(e: React.FormEvent<HTMLFormElement>)=>{e.preventDefault(); alert('Thanks! We\'ll reach out in 24 hours.')}}>
                 <input required placeholder="Full name" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
                 <input required type="email" placeholder="Email" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
                 <input required placeholder="Phone (WhatsApp)" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
@@ -339,6 +339,15 @@ export default function DesignXStudentLanding() {
         </div>
       </section>
 
+      // curved loop component
+        {/* <CurvedLoop
+          marqueeText="DesignX Skool"
+          speed={2}
+          className="text-4xl font-bold text-white"
+          curveAmount={400}
+          direction="left"
+          interactive={true}
+        /> */}
       {/* FOOTER */}
       <footer className="border-t border-white/10 bg-neutral-950/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-white/70">
