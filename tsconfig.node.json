@@ -1,0 +1,11 @@
+{
+    "include": ["vite.config.js"],
+    "compilerOptions": {
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "allowSyntheticDefaultImports": true,
+      "allowJs": true,
+      "types": ["node"],
+      "noEmit": true
+    }
+}
