@@ -32,22 +32,14 @@ export default function DesignXStudentLanding() {
 
   const price = useMemo(() => {
     return pricePlan === "full"
-      ? { label: "Full Pay", amount: "₹24,  999", sub: "Save ₹5,000 vs EMI" }
+      ? { label: "Full Pay", amount: "₹24,999", sub: "Save ₹5,000 vs EMI" }
       : { label: "EMI (3 x)", amount: "₹9,999 / mo", sub: "Instant approval on UPI cards" }
   }, [pricePlan])
-
-  const getData = async () => {
-    const response = await fetch(import.meta.env.VITE_API_URL + "students")
-    const data = await response.json()
-    console.log(data)
-  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = event.currentTarget
     const formData = new FormData(form)
-
-    getData()
 
     const payload = {
       fullName: String(formData.get("fullName") || "").trim(),
@@ -66,7 +58,7 @@ export default function DesignXStudentLanding() {
       setIsSubmitting(true)
       setSubmitStatus(null)
 
-      const response = await fetch(import.meta.env.VITE_API_URL + "students", {
+      const response = await fetch("/api/students", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -1,8 +1,7 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const cors = require('cors');
-const path = require('path');
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const { Schema } = mongoose;
 
@@ -10,16 +9,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/design-codex';
+// MongoDB connection - reuse connection if exists
+let cachedDb = null;
 
-mongoose
-  .connect(mongoUri)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch((err) => {
+async function connectToDatabase() {
+  if (cachedDb && mongoose.connection.readyState === 1) {
+    return cachedDb;
+  }
+
+  const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/design-codex';
+  
+  try {
+    await mongoose.connect(mongoUri);
+    cachedDb = mongoose.connection;
+    console.log('✅ Connected to MongoDB');
+    return cachedDb;
+  } catch (err) {
     console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1);
-  });
+    throw err;
+  }
+}
 
 // StudentList schema & model
 const studentListSchema = new Schema(
@@ -39,11 +48,12 @@ const studentListSchema = new Schema(
   { timestamps: true }
 );
 
-const StudentList = mongoose.model('StudentList', studentListSchema);
+const StudentList = mongoose.models.StudentList || mongoose.model('StudentList', studentListSchema);
 
-// API routes
-app.get('/api/students', async (req, res) => {
+// API routes - paths should match what comes after /api/ in the redirect
+app.get('/students', async (req, res) => {
   try {
+    await connectToDatabase();
     const students = await StudentList.find().sort({ createdAt: -1 });
     res.json(students);
   } catch (error) {
@@ -51,8 +61,9 @@ app.get('/api/students', async (req, res) => {
   }
 });
 
-app.post('/api/students', async (req, res) => {
+app.post('/students', async (req, res) => {
   try {
+    await connectToDatabase();
     const { fullName, email, whatsAppNumber, dayType, summary } = req.body;
     const student = await StudentList.create({ fullName, email, whatsAppNumber, dayType, summary });
     res.status(201).json(student);
@@ -64,17 +75,10 @@ app.post('/api/students', async (req, res) => {
   }
 });
 
-// Example API route
-app.get('/api/hello', (req, res) => {
+app.get('/hello', async (req, res) => {
   res.json({ message: 'Hello from Node backend!' });
 });
 
-// Serve React build (for production)
-app.use(express.static(path.join(__dirname, '../build')));
+// Export the serverless handler
+module.exports.handler = serverless(app);
 
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-// });
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
