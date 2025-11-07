@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, type FormEvent } from "react"
 import CurvedLoop from "./components/CurvedLoop"
 import fintechImg from "./assets/fintech.jpg"
 import healthcareImg from "./assets/healthcare.jpg"
@@ -15,6 +15,10 @@ const logo = "/logo.jpeg"
 
 export default function DesignXStudentLanding() {
   const [pricePlan, setPricePlan] = useState<"full" | "emi">("full")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<
+    { type: "success" | "error"; message: string } | null
+  >(null)
   const eventDate = useMemo(() => {
     // Next cohort info (IST)
     return {
@@ -28,9 +32,65 @@ export default function DesignXStudentLanding() {
 
   const price = useMemo(() => {
     return pricePlan === "full"
-      ? { label: "Full Pay", amount: "₹24,999", sub: "Save ₹5,000 vs EMI" }
+      ? { label: "Full Pay", amount: "₹24,  999", sub: "Save ₹5,000 vs EMI" }
       : { label: "EMI (3 x)", amount: "₹9,999 / mo", sub: "Instant approval on UPI cards" }
   }, [pricePlan])
+
+  const getData = async () => {
+    const response = await fetch(import.meta.env.VITE_API_URL + "students")
+    const data = await response.json()
+    console.log(data)
+  }
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    getData()
+
+    const payload = {
+      fullName: String(formData.get("fullName") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      whatsAppNumber: String(formData.get("whatsAppNumber") || "").trim(),
+      dayType: String(formData.get("dayType") || "").trim(),
+      summary: String(formData.get("summary") || "").trim(),
+    }
+
+    if (!payload.fullName || !payload.email || !payload.whatsAppNumber || !payload.dayType) {
+      setSubmitStatus({ type: "error", message: "Please fill in all required fields." })
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+      setSubmitStatus(null)
+
+      const response = await fetch(import.meta.env.VITE_API_URL + "students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorBody = (await response.json().catch(() => null)) as { message?: string } | null
+        const message = errorBody?.message ?? "Failed to submit application."
+        throw new Error(message)
+      }
+
+      setSubmitStatus({ type: "success", message: "Thanks! We'll reach out in 24 hours." })
+      form.reset()
+      const dayTypeSelect = form.elements.namedItem("dayType") as HTMLSelectElement | null
+      if (dayTypeSelect) {
+        dayTypeSelect.value = "weekdays"
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again."
+      setSubmitStatus({ type: "error", message })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
@@ -264,16 +324,63 @@ export default function DesignXStudentLanding() {
             <div id="apply" className="rounded-3xl border border-white/10 bg-neutral-900 p-6 lg:p-8">
               <h3 className="text-2xl font-bold">Apply for the {eventDate.start} cohort</h3>
               <p className="text-white/70 mt-1 text-sm">{eventDate.duration} • {eventDate.weekdayBatch} • {eventDate.weekendBatch}</p>
-              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={(e: React.FormEvent<HTMLFormElement>)=>{e.preventDefault(); alert('Thanks! We\'ll reach out in 24 hours.')}}>
-                <input required placeholder="Full name" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <input required type="email" placeholder="Email" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <input required placeholder="Phone (WhatsApp)" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <select className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-white/20">
-                  <option>Weekday (7–9 PM IST)</option>
-                  <option>Weekend (10 AM–12 PM IST)</option>
+              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={handleSubmit} noValidate>
+                <input
+                  required
+                  name="fullName"
+                  placeholder="Full name"
+                  autoComplete="name"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <input
+                  required
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  autoComplete="email"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <input
+                  required
+                  name="whatsAppNumber"
+                  placeholder="Phone (WhatsApp)"
+                  autoComplete="tel"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <select
+                  required
+                  name="dayType"
+                  defaultValue="weekdays"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-white/20"
+                >
+                  <option value="weekdays">Weekday (7–9 PM IST)</option>
+                  <option value="weekend">Weekend (10 AM–12 PM IST)</option>
                 </select>
-                <textarea placeholder="Tell us why you’re joining (optional)" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm h-28 outline-none focus:ring-2 focus:ring-white/20" />
-                <button type="submit" className="rounded-2xl bg-white px-6 py-3 font-semibold hover:bg-white/90 [color:#747bff]">Submit application</button>
+                <textarea
+                  name="summary"
+                  placeholder="Tell us why you’re joining (optional)"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm h-28 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-2xl bg-white px-6 py-3 font-semibold hover:bg-white/90 [color:#747bff] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit application"}
+                </button>
+                {submitStatus && (
+                  <p
+                    role="status"
+                    aria-live="polite"
+                    className={`text-xs ${
+                      submitStatus.type === "success"
+                        ? "text-emerald-300"
+                        : "text-rose-300"
+                    }`}
+                  >
+                    {submitStatus.message}
+                  </p>
+                )}
                 <p className="text-xs text-white/60">By submitting, you agree to our terms and consent to be contacted via WhatsApp/Email.</p>
               </form>
             </div>
