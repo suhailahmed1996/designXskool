@@ -5,6 +5,7 @@ import healthcareImg from "./assets/healthcare.jpg"
 import ecommerceImg from "./assets/ecommerce.jpg"
 
 const logo = "/logo.jpeg"
+const VITE_API_URL = import.meta.env.VITE_API_URL || 3000
 
 // ===== Notes =====
 // • Drop this file into any Vite/Next/CRA project with Tailwind.
@@ -58,7 +59,7 @@ export default function DesignXStudentLanding() {
       setIsSubmitting(true)
       setSubmitStatus(null)
 
-      const response = await fetch("/api/students", {
+      const response = await fetch(VITE_API_URL+"students", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
