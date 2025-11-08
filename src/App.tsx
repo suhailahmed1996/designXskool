@@ -5,7 +5,7 @@ import healthcareImg from "./assets/healthcare.jpg"
 import ecommerceImg from "./assets/ecommerce.jpg"
 
 const logo = "/logo.jpeg"
-const VITE_API_URL = import.meta.env.VITE_API_URL || 3000
+const VITE_API_URL = import.meta.env.VITE_API_URL
 
 // ===== Notes =====
 // • Drop this file into any Vite/Next/CRA project with Tailwind.
