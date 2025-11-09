@@ -3,6 +3,8 @@ import CurvedLoop from "./components/CurvedLoop"
 import fintechImg from "./assets/fintech.jpg"
 import healthcareImg from "./assets/healthcare.jpg"
 import ecommerceImg from "./assets/ecommerce.jpg"
+import { addUser } from "./api"
+import { AxiosResponse } from "axios"
 
 const logo = "/logo.jpeg"
 const VITE_API_URL = import.meta.env.VITE_API_URL
@@ -59,25 +61,22 @@ export default function DesignXStudentLanding() {
       setIsSubmitting(true)
       setSubmitStatus(null)
 
-      const response1 = await fetch(VITE_API_URL+"students", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
+      // const response1 = await fetch(VITE_API_URL+"students", {
+      //   method: "GET",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // })
       
-      const response = await fetch(VITE_API_URL+"students", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
+      // const response = await fetch(VITE_API_URL+"students", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // })
 
-      if (!response.ok) {
-        const errorBody = (await response.json().catch(() => null)) as { message?: string } | null
-        const message = errorBody?.message ?? "Failed to submit application."
-        throw new Error(message)
-      }
+      const response: AxiosResponse<any> = await addUser(payload)
 
-      setSubmitStatus({ type: "success", message: "Thanks! We'll reach out in 24 hours." })
+      response.status === 201 ? setSubmitStatus({ type: "success", message: "Thanks! We'll reach out in 24 hours." }) : setSubmitStatus({ type: "error", message: "Something went wrong. Please try again." })
+
       form.reset()
       const dayTypeSelect = form.elements.namedItem("dayType") as HTMLSelectElement | null
       if (dayTypeSelect) {
