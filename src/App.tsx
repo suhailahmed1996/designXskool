@@ -1,13 +1,13 @@
 import { useMemo, useState, type FormEvent } from "react"
-import CurvedLoop from "./components/CurvedLoop"
+// import CurvedLoop from "./components/CurvedLoop"
 import fintechImg from "./assets/fintech.jpg"
 import healthcareImg from "./assets/healthcare.jpg"
 import ecommerceImg from "./assets/ecommerce.jpg"
 import { addUser } from "./api"
 import { AxiosResponse } from "axios"
 
-const logo = "/logo.jpeg"
-const VITE_API_URL = import.meta.env.VITE_API_URL
+import logoImg from "./assets/designx-dark.svg"
+// const VITE_API_URL = import.meta.env.VITE_API_URL
 
 // ===== Notes =====
 // • Drop this file into any Vite/Next/CRA project with Tailwind.
@@ -96,7 +96,7 @@ export default function DesignXStudentLanding() {
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 bg-neutral-950/90 border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={logo} className="h-16 w-auto" />
+            <img src={logoImg} className="h-16 w-auto" />
             {/* <span className="font-semibold tracking-tight">DesignX Skool</span> */}
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-white/80">
