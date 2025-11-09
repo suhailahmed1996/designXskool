@@ -457,7 +457,7 @@ export default function DesignXStudentLanding() {
         </div>
       </section>
 
-      // curved loop component
+       {/* curved loop component */}
         {/* <CurvedLoop
           marqueeText="DesignX Skool"
           speed={2}
