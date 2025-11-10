@@ -270,7 +270,8 @@ export default function DesignXStudentLanding() {
               { n: "Suhail Ahmed", r: "Founder of bizzzup | woooys", s: "UX Instructor",x: "10+ Years of experience" },
               { n: "Mukilan", r: "", s: "UI/UX Designer Instructor | AI Artist",x: "" },
               { n: "Archana", r: "", s: "Graphic Designer | AI Artist",x: "" },
-              { n: "Shalini", r: "", s: "Graphic Design Instructor",x: "" }
+              { n: "Shalini", r: "", s: "Graphic Design Instructor",x: "" },
+              { n: "Muhammed Bilal", s: "Senior Angular Developer", x: "8+ Years of experience" },
             ].map(({ n, r, s, x }) => (
               <div key={n} className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
                 <div className="h-28 rounded-xl bg-neutral-800 border border-white/5" />
