@@ -96,7 +96,7 @@ export default function DesignXStudentLanding() {
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 bg-neutral-950/90 border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={logoImg} className="h-16 w-auto" />
+            <img src={logoImg} className="w-30" />
             {/* <span className="font-semibold tracking-tight">DesignX Skool</span> */}
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-white/80">
