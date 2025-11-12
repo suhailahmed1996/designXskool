@@ -189,3 +189,12 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+.pc-contact-btn {
+  color: black !important;
+}
+
+.instagram-embed iframe {
+  min-width: 400px;
+  height: 600px;
+}

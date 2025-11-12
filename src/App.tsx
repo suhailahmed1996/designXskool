@@ -13,6 +13,13 @@ import mukilanImg from "./assets/mukilan.jpeg"
 import archanaImg from "./assets/archana.jpeg"
 import shaliniImg from "./assets/shalini.jpeg"
 import muhammedBilalImg from "./assets/muhammed-bilal.png"
+import ProfileCard from "./components/ProfileCard"
+import InstagramEmbed from "./shared-components/InstagramEmbered"
+import ChatGptIcon from "./shared-components/ChatGpt"
+import instagramImg from "./assets/instagram.png"
+import suhailAhmedTransparentImg from "./assets/suhail-ahmed-transparent-bg.png"
+import GrainImg from "./assets/grain.webp"
+import IconPatternImg from "./assets/iconpattern.png"
 
 // const VITE_API_URL = import.meta.env.VITE_API_URL
 
@@ -506,17 +513,47 @@ export default function DesignXStudentLanding() {
         </div>
       </section>
 
-       {/* curved loop component */}
-        {/* <CurvedLoop
-          marqueeText="DesignX Skool"
-          speed={2}
-          className="text-4xl font-bold text-white"
-          curveAmount={400}
-          direction="left"
-          interactive={true}
+      <div className="flex justify-center items-center my-10">
+        <div className="relative">
+        <InstagramEmbed />
+        <div className="chatgpt-icon absolute bottom-[5px] right-[-50px]">
+          <ChatGptIcon />
+        </div>
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center h-screen">
+        {/* <ProfileCard
+          name="Javi A. Torres"
+          title="Software Engineer"
+          handle="javicodes"
+          status="Online"
+          contactText="Contact Me"
+          avatarUrl="https://reactbits.dev/assets/demo/person.webp"
+          iconUrl="https://reactbits.dev/assets/demo/iconpattern.png"
+          grainUrl="https://reactbits.dev/assets/demo/grain.webp"
+          showUserInfo={true}
+          enableTilt={true}
+          enableMobileTilt={false}
+          onContactClick={() => console.log('Contact clicked')}
         /> */}
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 bg-neutral-950/80">
+
+        <ProfileCard
+          name="Suhail Ahmed"
+          title="UX Instructor"
+          handle="suhailahmed1996"
+          status="Online"
+          contactText="Contact Me"
+          avatarUrl={suhailAhmedTransparentImg}
+          grainUrl={GrainImg}
+          iconUrl={IconPatternImg}
+          showUserInfo={true}
+          enableTilt={true}
+          enableMobileTilt={false}
+          onContactClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })}
+        />
+      </div>
+      <footer className="border-t border-white/10 bg-neutral-950/80" id="footer">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-white/70">
           <div className="grid md:grid-cols-4 gap-6">
             <div>
@@ -546,7 +583,11 @@ export default function DesignXStudentLanding() {
             <div>
               <p className="text-white font-semibold">Contact</p>
               <p className="mt-2 text-white/70">hi@designxskool.com</p>
-              <p className="text-white/70">+91‑90030‑20030</p>
+              <p className="text-white/70 mb-[5px]">+91‑90030‑20030</p>
+              <a href="https://www.instagram.com/designx_india/" className="flex items-center">
+                <img src={instagramImg} alt="Instagram" className="w-[20px] h-[20px]" />
+                <span className="ml-[5px]">Instagram</span>
+              </a>
             </div>
           </div>
           <p className="mt-8 text-xs text-white/50">© {new Date().getFullYear()} DesignX Skool. All rights reserved.</p>
