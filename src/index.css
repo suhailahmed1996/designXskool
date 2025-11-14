@@ -198,3 +198,7 @@ button:focus-visible {
   min-width: 400px;
   height: 600px;
 }
+
+.pc-contact-btn {
+  white-space: nowrap;
+}

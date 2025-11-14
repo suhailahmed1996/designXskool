@@ -1,5 +1,4 @@
 import { useMemo, useState, type FormEvent } from "react"
-// import CurvedLoop from "./components/CurvedLoop"
 import fintechImg from "./assets/fintech.jpg"
 import healthcareImg from "./assets/healthcare.jpg"
 import ecommerceImg from "./assets/ecommerce.jpg"
@@ -7,19 +6,10 @@ import { addUser } from "./api"
 import { AxiosResponse } from "axios"
 
 import logoImg from "./assets/designx-dark.svg"
-import mohammedMansoorImg from "./assets/mohammed-mansoor.png"
-import suhailAhmedImg from "./assets/suhail-ahmed.jpeg"
-import mukilanImg from "./assets/mukilan.jpeg"
-import archanaImg from "./assets/archana.jpeg"
-import shaliniImg from "./assets/shalini.jpeg"
-import muhammedBilalImg from "./assets/muhammed-bilal.png"
-import ProfileCard from "./components/ProfileCard"
 import InstagramEmbed from "./shared-components/InstagramEmbered"
 import ChatGptIcon from "./shared-components/ChatGpt"
 import instagramImg from "./assets/instagram.png"
-import suhailAhmedTransparentImg from "./assets/suhail-ahmed-transparent-bg.png"
-import GrainImg from "./assets/grain.webp"
-import IconPatternImg from "./assets/iconpattern.png"
+import TeamCard from "./shared-components/TeamCard"
 
 // const VITE_API_URL = import.meta.env.VITE_API_URL
 
@@ -52,49 +42,6 @@ export default function DesignXStudentLanding() {
       ? { label: "Full Pay", amount: "₹24,999", sub: "Save ₹5,000 vs EMI" }
       : { label: "EMI (3 x)", amount: "₹9,999 / mo", sub: "Instant approval on UPI cards" }
   }, [pricePlan])
-
- const mentorsDetails = [
-  { 
-    n: "Mohammed Mansoor", 
-    r: "Founder of UserX", 
-    s: "UX Instructor",
-    x: "30+  Years of experience",
-    img: mohammedMansoorImg
-   },
-  { 
-    n: "Suhail Ahmed", 
-    r: "Founder of bizzzup | woooys", 
-    s: "UX Instructor",
-    x: "10+ Years of experience" ,  
-    img: suhailAhmedImg
-  },
-  { n: "Mukilan", 
-    r: "", 
-    s: "UI/UX Designer Instructor | AI Artist",
-    x: "" ,
-    img: mukilanImg
-  },
-  { 
-    n: "Archana", 
-    r: "", 
-    s: "Graphic Designer | AI Artist",
-    x: "" ,
-    img: archanaImg
-  },
-  { 
-    n: "Shalini", 
-    r: "", 
-    s: "Graphic Design Instructor",
-    x: "" ,
-    img: shaliniImg
-  },
-  { 
-    n: "Muhammed Bilal", 
-    s: "Senior Angular Developer", 
-    x: "8+ Years of experience" ,
-    img: muhammedBilalImg
-  },
-] 
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -318,25 +265,7 @@ export default function DesignXStudentLanding() {
       </section>
 
       {/* MENTORS */}
-      <section id="mentors" className="border-t border-white/10 bg-neutral-950/60">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl md:text-4xl font-bold">Mentors who hire designers</h2>
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            { 
-             mentorsDetails.map(({ n, r, s, x, img }) => (
-              <div key={n} className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
-                <div className="h-28 rounded-xl bg-neutral-800 border border-white/5">
-                  <img src={img} className="w-full h-full object-cover" />
-                </div>
-                <h3 className="mt-3 font-semibold">{n ? n : ""}</h3>
-                <p className="text-sm text-white/70">{r ? r : ""}</p>
-                <p className="text-xs text-white/60 mt-1">{s ? s : ""}{x ? ', ' + x : ""}</p>
-              </div>
-            ))
-            }
-          </div>
-        </div>
-      </section>
+      <TeamCard />
 
       {/* OFFER + PRICING */}
       <section id="pricing" className="border-t border-white/10">
@@ -522,37 +451,7 @@ export default function DesignXStudentLanding() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center h-screen">
-        {/* <ProfileCard
-          name="Javi A. Torres"
-          title="Software Engineer"
-          handle="javicodes"
-          status="Online"
-          contactText="Contact Me"
-          avatarUrl="https://reactbits.dev/assets/demo/person.webp"
-          iconUrl="https://reactbits.dev/assets/demo/iconpattern.png"
-          grainUrl="https://reactbits.dev/assets/demo/grain.webp"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          onContactClick={() => console.log('Contact clicked')}
-        /> */}
-
-        <ProfileCard
-          name="Suhail Ahmed"
-          title="UX Instructor"
-          handle="suhailahmed1996"
-          status="Online"
-          contactText="Contact Me"
-          avatarUrl={suhailAhmedTransparentImg}
-          grainUrl={GrainImg}
-          iconUrl={IconPatternImg}
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          onContactClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })}
-        />
-      </div>
+      
       <footer className="border-t border-white/10 bg-neutral-950/80" id="footer">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-white/70">
           <div className="grid md:grid-cols-4 gap-6">
