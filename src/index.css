@@ -202,3 +202,7 @@ button:focus-visible {
 .pc-contact-btn {
   white-space: nowrap;
 }
+
+.a-link {
+  cursor: pointer;
+}

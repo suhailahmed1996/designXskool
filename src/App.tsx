@@ -56,7 +56,13 @@ export default function DesignXStudentLanding() {
   }, [pricePlan])
 
   const navigateTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    const element = document.getElementById(id)
+    if (element) {
+      const yOffset = -100 // Scroll to 100px from top
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+      console.log(y)
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -127,13 +133,13 @@ export default function DesignXStudentLanding() {
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#faq" className="hover:text-white">FAQ</a>
           </nav>
-          <a href="#apply" className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2 text-sm font-semibold hover:bg-white/90">Apply now</a>
+          <a href="#apply" className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2 text-sm font-semibold hover:bg-white/90 a-link">Apply now</a>
         </div>
       </header>
 
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(111,76,255,0.25),rgba(0,0,0,0))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(111,76,255,0.25),rgba(0,0,0,0))] h-[300px]" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-12">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
@@ -149,8 +155,8 @@ export default function DesignXStudentLanding() {
                 Learn by building real products with mentors from top studios. Graduate with a standout portfolio, interview prep, and referrals.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold shadow-lg shadow-white/10 hover:bg-white/90">Start application</a>
-                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">Download syllabus</a>
+                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold shadow-lg shadow-white/10 hover:bg-white/90 a-link">Start application</a>
+                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10 a-link">Download syllabus</a>
               </div>
               <p className="mt-4 text-xs text-white/60">Cohort starts {eventDate.start} • Limited seats • No design background required</p>
             </div>
@@ -449,8 +455,8 @@ export default function DesignXStudentLanding() {
           <h2 className="text-3xl md:text-4xl font-extrabold">Your design career starts now</h2>
           <p className="mt-3 text-white/80">Join the {eventDate.start} cohort and build a portfolio that opens doors.</p>
           <div className="mt-6 flex items-center justify-center gap-3">
-            <a href="#apply" className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold hover:bg-white/90">Apply now</a>
-            <a href="#syllabus" className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">Get syllabus</a>
+            <a onClick={(e) => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold hover:bg-white/90 a-link">Apply now</a>
+            <a onClick={(e) => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10 a-link">Get syllabus</a>
           </div>
         </div>
       </section>
