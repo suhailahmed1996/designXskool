@@ -1,10 +1,10 @@
 {/*images*/}
 
-import MohammedMansoor from "../assets/mohammed-mansoor-transparent.png"
+import MohammedMansoor from "../assets/mohammed-mansoor-transparent-1.png"
 import Mukilan from "../assets/mukilan-transparent.png"
 import Archana from "../assets/archana-transparent.png"
 import Shalini from "../assets/shalini-transparent.png"
-import MuhammedBilal from "../assets/muhammed-bilal-transparent-2.png"
+import MuhammedBilal from "../assets/muhammed-bilal-transparent-4.png"
 import SuhailAhmed from "../assets/suhail-ahmed-transparent-bg.png"
 import GrainImg from "../assets/grain.webp"
 import IconPatternImg from "../assets/iconpattern.png"
@@ -13,6 +13,7 @@ import IconPatternImg from "../assets/iconpattern.png"
 import ProfileCard from "../components/ProfileCard"
 
 interface Mentor {
+  id: string;
   name: string;
   role: string;
   subRole: string;
@@ -22,6 +23,7 @@ interface Mentor {
 
 const mentorsDetails: Mentor[] = [
     { 
+      id: "0",
       name: "Mohammed Mansoor", 
       role: "Founder of UserX", 
       subRole: "UX Instructor",
@@ -29,6 +31,7 @@ const mentorsDetails: Mentor[] = [
       avatarUrl: MohammedMansoor
      },
     { 
+      id: "1",
       name: "Suhail Ahmed", 
       role: "Founder of bizzzup | woooys", 
       subRole: "UX Instructor",
@@ -36,6 +39,7 @@ const mentorsDetails: Mentor[] = [
       avatarUrl: SuhailAhmed
     },
     { 
+      id: "2",
       name: "Mukilan", 
       role: "Designer at bizzzup", 
       subRole: "UI/UX Designer Instructor | AI Artist",
@@ -43,6 +47,7 @@ const mentorsDetails: Mentor[] = [
       avatarUrl: Mukilan
     },
     { 
+      id: "3",
       name: "Archana", 
       role: "Graphic Designer at bizzzup", 
       subRole: "Graphic Designer | AI Artist",
@@ -50,6 +55,7 @@ const mentorsDetails: Mentor[] = [
       avatarUrl: Archana
     },
     { 
+      id: "4",
       name: "Shalini", 
       role: "Graphic Designer at bizzzup", 
       subRole: "Graphic Design Instructor",
@@ -57,6 +63,7 @@ const mentorsDetails: Mentor[] = [
       avatarUrl: Shalini
     },
     { 
+      id: "5",
       name: "Muhammed Bilal", 
       role: "Software Developer at userX", 
       subRole: "Senior Angular Developer", 
@@ -99,12 +106,14 @@ export default function TeamCard() {
 
           <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             { 
-             mentorsDetails.map(({ name, role, subRole, experience, avatarUrl }) => (
+             mentorsDetails.map(({ id, name, role, subRole, experience, avatarUrl }) => (
                 <ProfileCard
+                key={id}
                 name={name}
                 title={role}
                 handle={subRole}
                 status={experience}
+                showContactButton={false}
                 contactText={'Contact Me'}
                 avatarUrl={avatarUrl}
                 grainUrl={GrainImg}

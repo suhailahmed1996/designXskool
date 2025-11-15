@@ -21,6 +21,7 @@ interface ProfileCardProps {
   contactText?: string;
   showUserInfo?: boolean;
   onContactClick?: () => void;
+  showContactButton?: boolean;
 }
 
 const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
@@ -57,7 +58,8 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   status = 'Online',
   contactText = 'Contact',
   showUserInfo = true,
-  onContactClick
+  onContactClick,
+  showContactButton = false,
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -367,6 +369,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                       <div className="pc-status">{status}</div>
                     </div>
                   </div>
+                  {showContactButton && (
                   <button
                     className="pc-contact-btn text-black"
                     onClick={handleContactClick}
@@ -376,6 +379,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   >
                     {contactText}
                   </button>
+                  )}
                 </div>
               )}
             </div>
