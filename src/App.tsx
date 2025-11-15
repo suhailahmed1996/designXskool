@@ -461,14 +461,14 @@ export default function DesignXStudentLanding() {
         </div>
       </section>
 
-      <div className="flex justify-center items-center my-10">
+      {/* <div className="flex justify-center items-center my-10">
         <div className="relative">
         <InstagramEmbed />
         <div className="chatgpt-icon absolute bottom-[5px] right-[-50px]">
           <ChatGptIcon />
         </div>
         </div>
-      </div>
+      </div> */}
 
       
       <footer className="border-t border-white/10 bg-neutral-950/80" id="footer">
