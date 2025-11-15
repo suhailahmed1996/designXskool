@@ -169,7 +169,7 @@ export default function DesignXStudentLanding() {
                     loop
                     muted
                     playsInline
-                    className="h-[85%] aspect-ratio[4/2]"
+                    className="h-[85%] introduction-video"
                     // className="w-full h-[85%] object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-neutral-950/80 to-transparent">

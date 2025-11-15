@@ -206,3 +206,7 @@ button:focus-visible {
 .a-link {
   cursor: pointer;
 }
+
+.introduction-video {
+  aspect-ratio: 3/1;
+}
