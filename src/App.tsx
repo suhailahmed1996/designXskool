@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import fintechImg from "./assets/fintech.jpg";
 import healthcareImg from "./assets/healthcare.jpg";
 import ecommerceImg from "./assets/ecommerce.jpg";
@@ -34,6 +34,7 @@ const applicationTools = [
 ];
 
 export default function DesignXStudentLanding() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [pricePlan, setPricePlan] = useState<"full" | "emi">("full");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -60,6 +61,27 @@ export default function DesignXStudentLanding() {
           sub: "Instant approval on UPI cards",
         };
   }, [pricePlan]);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    console.log("inside useEffect play");
+
+    const timer = setTimeout(() => {
+      const tryPlay = async () => {
+        try {
+          v.muted = false;
+          // Calling play again in case the browser paused when unmuted
+          await v.play();
+        } catch (error) {
+          console.warn("Video autoplay with sound was blocked:", error);
+        }
+      };
+      tryPlay();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const navigateTo = (id: string) => {
     const element = document.getElementById(id);
@@ -228,14 +250,18 @@ export default function DesignXStudentLanding() {
               <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-white/10 p-1">
                 <div className="h-full w-full rounded-3xl bg-neutral-950/40 overflow-hidden relative">
                   <video
+                    ref={videoRef}
                     src={introVideo}
                     autoPlay
-                    loop
                     muted
+                    loop
                     playsInline
                     className="h-[85%] introduction-video"
+                    id="video-player"
                     // className="w-full h-[85%] object-cover"
-                  />
+                  >
+                    Your browser does not support the video tag.
+                  </video>
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-neutral-950/80 to-transparent">
                     <div className="flex justify-center flex-wrap gap-2">
                       {applicationTools.map(({ label, value }) => (
