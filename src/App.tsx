@@ -63,11 +63,12 @@ export default function DesignXStudentLanding() {
   }, [pricePlan]);
 
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    console.log("inside useEffect play");
-
     const timer = setTimeout(() => {
+      const v = videoRef.current;
+      if (!v) return;
+
+      console.log("inside useEffect play");
+
       const tryPlay = async () => {
         try {
           v.muted = false;
