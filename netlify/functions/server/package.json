@@ -1,0 +1,13 @@
+{
+  "name": "netlify-function-server",
+  "version": "1.0.0",
+  "description": "Netlify serverless function for API",
+  "main": "server.js",
+  "dependencies": {
+    "serverless-http": "^3.2.0",
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "mongoose": "^8.7.0"
+  }
+}
+

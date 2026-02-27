@@ -1,5 +1,20 @@
-import React from "react"
-import { useMemo, useState } from "react"
+import { useMemo, useState, type FormEvent } from "react"
+import fintechImg from "./assets/fintech.jpg"
+import healthcareImg from "./assets/healthcare.jpg"
+import ecommerceImg from "./assets/ecommerce.jpg"
+import { addUser } from "./api"
+import { AxiosResponse } from "axios"
+
+import logoImg from "./assets/designx-dark.svg"
+import InstagramEmbed from "./shared-components/InstagramEmbered"
+import ChatGptIcon from "./shared-components/ChatGpt"
+import instagramImg from "./assets/instagram.png"
+import TeamCard from "./shared-components/TeamCard"
+import AluminiCompany from "./shared-components/AluminiCompany"
+import introVideo from "./assets/video/introduction.mp4"
+import favIcon from "./assets/favicon.ico"
+
+// const VITE_API_URL = import.meta.env.VITE_API_URL
 
 // ===== Notes =====
 // • Drop this file into any Vite/Next/CRA project with Tailwind.
@@ -8,13 +23,27 @@ import { useMemo, useState } from "react"
 // • Sections are conversion‑focused: Problem → Outcome → Proof → Offer → Risk Reversal → Urgency → CTA.
 // • Form posts to a dummy endpoint; hook it to HubSpot/Forms/Razorpay/etc.
 
+const applicationTools = [
+  { label: "Figma", value: "figma" },
+  { label: "Affinity", value: "affinity" },
+  { label: "Notion", value: "notion" },
+  { label: "Balsamiq", value: "balsamiq" },
+  { label: "ChatGPT", value: "chatgpt" },
+  { label: "Preplexity", value: "preplexity" },
+  { label: "Lovable", value: "lovable" }
+]
+
 export default function DesignXStudentLanding() {
-  const [pricePlan, setPricePlan] = useState("full")
+  const [pricePlan, setPricePlan] = useState<"full" | "emi">("full")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<
+    { type: "success" | "error"; message: string } | null
+  >(null)
   const eventDate = useMemo(() => {
     // Next cohort info (IST)
     return {
-      start: "Nov 10, 2025",
-      end: "Feb 09, 2026",
+      start: "Nov 27, 2025",
+      end: "Feb 19, 2026",
       duration: "12 weeks",
       weekdayBatch: "Mon–Fri, 7–9 PM IST",
       weekendBatch: "Sat–Sun, 10 AM–12 PM IST",
@@ -27,14 +56,75 @@ export default function DesignXStudentLanding() {
       : { label: "EMI (3 x)", amount: "₹9,999 / mo", sub: "Instant approval on UPI cards" }
   }, [pricePlan])
 
+  const navigateTo = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      const yOffset = -100 // Scroll to 100px from top
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+      console.log(y)
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    const payload = {
+      fullName: String(formData.get("fullName") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      whatsAppNumber: String(formData.get("whatsAppNumber") || "").trim(),
+      dayType: String(formData.get("dayType") || "").trim(),
+      summary: String(formData.get("summary") || "").trim(),
+    }
+
+    if (!payload.fullName || !payload.email || !payload.whatsAppNumber || !payload.dayType) {
+      setSubmitStatus({ type: "error", message: "Please fill in all required fields." })
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+      setSubmitStatus(null)
+
+      // const response1 = await fetch(VITE_API_URL+"students", {
+      //   method: "GET",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // })
+      
+      // const response = await fetch(VITE_API_URL+"students", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // })
+
+      const response: AxiosResponse<any> = await addUser(payload)
+
+      response.status === 201 ? setSubmitStatus({ type: "success", message: "Thanks! We'll reach out in 24 hours." }) : setSubmitStatus({ type: "error", message: "Something went wrong. Please try again." })
+
+      form.reset()
+      const dayTypeSelect = form.elements.namedItem("dayType") as HTMLSelectElement | null
+      if (dayTypeSelect) {
+        dayTypeSelect.value = "weekdays"
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again."
+      setSubmitStatus({ type: "error", message })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
       {/* NAV */}
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 bg-neutral-950/90 border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-cyan-400 via-fuchsia-500 to-amber-400" />
-            <span className="font-semibold tracking-tight">DesignX Skool</span>
+            <img src={logoImg} className="w-30" />
+            {/* <span className="font-semibold tracking-tight">DesignX Skool</span> */}
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-white/80">
             <a href="#outcomes" className="hover:text-white">Outcomes</a>
@@ -44,13 +134,13 @@ export default function DesignXStudentLanding() {
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#faq" className="hover:text-white">FAQ</a>
           </nav>
-          <a href="#apply" className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2 text-sm font-semibold hover:bg-white/90">Apply now</a>
+          <a href="#apply" className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2 text-sm font-semibold hover:bg-white/90 a-link">Apply now</a>
         </div>
       </header>
 
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(111,76,255,0.25),rgba(0,0,0,0))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(111,76,255,0.25),rgba(0,0,0,0))] h-[300px]" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-12">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
@@ -66,22 +156,30 @@ export default function DesignXStudentLanding() {
                 Learn by building real products with mentors from top studios. Graduate with a standout portfolio, interview prep, and referrals.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <a href="#apply" className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold shadow-lg shadow-white/10 hover:bg-white/90">Start application</a>
-                <a href="#syllabus" className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">Download syllabus</a>
+                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold shadow-lg shadow-white/10 hover:bg-white/90 a-link">Start application</a>
+                <a onClick={() => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10 a-link">Download syllabus</a>
               </div>
               <p className="mt-4 text-xs text-white/60">Cohort starts {eventDate.start} • Limited seats • No design background required</p>
             </div>
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-white/10 p-1">
-                <div className="h-full w-full rounded-3xl bg-neutral-950/40 grid place-items-center text-center px-6">
-                  <div>
-                    <p className="text-sm text-white/60">Demo project preview</p>
-                    <h3 className="text-2xl font-bold mt-2">Design a Fintech Mobile App</h3>
-                    <p className="text-white/70 mt-2">Wireframe → UI kit → High‑fidelity screens → Prototype → Usability test</p>
-                    <div className="mt-6 flex justify-center gap-3">
-                      <span className="rounded-xl bg-white/5 px-3 py-1 text-xs border border-white/10">Figma</span>
-                      <span className="rounded-xl bg-white/5 px-3 py-1 text-xs border border-white/10">Notion</span>
-                      <span className="rounded-xl bg-white/5 px-3 py-1 text-xs border border-white/10">Framer</span>
+                <div className="h-full w-full rounded-3xl bg-neutral-950/40 overflow-hidden relative">
+                  <video
+                    src={introVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-[85%] introduction-video"
+                    // className="w-full h-[85%] object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-neutral-950/80 to-transparent">
+                    <div className="flex justify-center flex-wrap gap-2">
+                      {
+                        applicationTools.map(({ label, value }) => (
+                          <span key={value} className="rounded-xl bg-white/5 px-3 py-1 text-xs border border-white/10">{label}</span>
+                        ))
+                      }
                     </div>
                   </div>
                 </div>
@@ -95,18 +193,7 @@ export default function DesignXStudentLanding() {
       </section>
 
       {/* TRUST */}
-      <section className="border-t border-white/10 bg-neutral-950">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-          <p className="text-center text-white/60 text-sm">Alumni work at</p>
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 opacity-80">
-            {"Google,Zoho,Freshworks,Swiggy,Byju's,Flipkart".split(",").map((b) => (
-              <div key={b} className="h-12 rounded-xl border border-white/10 bg-neutral-900 grid place-items-center text-white/70 text-sm">
-                {b}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AluminiCompany />
 
       {/* OUTCOMES */}
       <section id="outcomes" className="border-t border-white/10">
@@ -175,12 +262,20 @@ export default function DesignXStudentLanding() {
           <h2 className="text-3xl md:text-4xl font-bold">Show‑stopping portfolio projects</h2>
           <div className="mt-8 grid md:grid-cols-3 gap-6">
             {[
-              { t: "Fintech Mobile App", d: "Onboarding, money transfer, analytics, accessibility checks." },
-              { t: "Healthcare Web App", d: "Appointments, records, HIPAA‑aware flows, empty‑state strategy." },
-              { t: "E‑commerce Revamp", d: "Product discovery, filters, cart‑abandon strategies, conversions." },
-            ].map(({ t, d }) => (
+              { t: "Fintech Mobile App", d: "Onboarding, money transfer, analytics, accessibility checks.",
+                img: fintechImg  
+               },
+              { t: "Healthcare Web App", d: "Appointments, records, HIPAA‑aware flows, empty‑state strategy.",
+                img: healthcareImg
+               },
+              { t: "E‑commerce Revamp", d: "Product discovery, filters, cart‑abandon strategies, conversions.",
+                img: ecommerceImg
+               },
+            ].map(({ t, d, img }) => (
               <div key={t} className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
-                <div className="aspect-[16/10] rounded-xl bg-neutral-800 border border-white/5" />
+                <div className="aspect-[16/10] rounded-xl bg-neutral-800 border border-white/5" >
+                <img src={img} className="w-full h-full [object-fit:cover]" />
+                </div>
                 <h3 className="mt-4 font-semibold">{t}</h3>
                 <p className="text-sm text-white/70 mt-1">{d}</p>
               </div>
@@ -190,26 +285,7 @@ export default function DesignXStudentLanding() {
       </section>
 
       {/* MENTORS */}
-      <section id="mentors" className="border-t border-white/10 bg-neutral-950/60">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl md:text-4xl font-bold">Mentors who hire designers</h2>
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { n: "Suhail Ahmed", r: "Founder, Bizzzup", s: "UX, Design systems, AI" },
-              { n: "Edwin", r: "Co‑founder, Bizzzup", s: "Data, AI, Analytics" },
-              { n: "Guest Mentor", r: "Ex‑FAANG", s: "Product design & leadership" },
-              { n: "Guest Recruiter", r: "Hiring Partner", s: "Interview & portfolio" },
-            ].map(({ n, r, s }) => (
-              <div key={n} className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
-                <div className="h-28 rounded-xl bg-neutral-800 border border-white/5" />
-                <h3 className="mt-3 font-semibold">{n}</h3>
-                <p className="text-sm text-white/70">{r}</p>
-                <p className="text-xs text-white/60 mt-1">{s}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TeamCard />
 
       {/* OFFER + PRICING */}
       <section id="pricing" className="border-t border-white/10">
@@ -219,9 +295,9 @@ export default function DesignXStudentLanding() {
               <h2 className="text-3xl md:text-4xl font-bold">Simple, student‑friendly pricing</h2>
               <p className="mt-3 text-white/80 max-w-prose">Pay once and save, or split into easy EMIs. Scholarships available for women returning to work and need‑based applicants.</p>
 
-              <div className="mt-6 inline-flex rounded-xl border border-white/15 p-1">
-                <button onClick={() => setPricePlan("full")} className={`px-4 py-2 rounded-lg text-sm ${pricePlan === "full" ? "bg-white text-neutral-900" : "text-white/80 hover:text-white"}`}>Full Pay</button>
-                <button onClick={() => setPricePlan("emi")} className={`px-4 py-2 rounded-lg text-sm ${pricePlan === "emi" ? "bg-white text-neutral-900" : "text-white/80 hover:text-white"}`}>EMI</button>
+              <div className="mt-6 inline-flex rounded-xl border border-white/15 p-1 gap-2">
+                <button onClick={() => setPricePlan("full")} className={`px-4 py-2 rounded-lg text-sm bg-white ${pricePlan === "full" ? "[color:#747bff]" : "text-neutral-900"}`}>Full Pay</button>
+                <button onClick={() => setPricePlan("emi")} className={`px-4 py-2 rounded-lg text-sm bg-white ${pricePlan === "emi" ? "[color:#747bff]" : "text-neutral-900"}`}>EMI</button>
               </div>
 
               <div className="mt-4 rounded-2xl border border-white/10 bg-neutral-900 p-6">
@@ -251,16 +327,63 @@ export default function DesignXStudentLanding() {
             <div id="apply" className="rounded-3xl border border-white/10 bg-neutral-900 p-6 lg:p-8">
               <h3 className="text-2xl font-bold">Apply for the {eventDate.start} cohort</h3>
               <p className="text-white/70 mt-1 text-sm">{eventDate.duration} • {eventDate.weekdayBatch} • {eventDate.weekendBatch}</p>
-              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={(e)=>{e.preventDefault(); alert('Thanks! We\'ll reach out in 24 hours.')}}>
-                <input required placeholder="Full name" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <input required type="email" placeholder="Email" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <input required placeholder="Phone (WhatsApp)" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20" />
-                <select className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-white/20">
-                  <option>Weekday (7–9 PM IST)</option>
-                  <option>Weekend (10 AM–12 PM IST)</option>
+              <form className="mt-6 grid grid-cols-1 gap-4" onSubmit={handleSubmit} noValidate>
+                <input
+                  required
+                  name="fullName"
+                  placeholder="Full name"
+                  autoComplete="name"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <input
+                  required
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  autoComplete="email"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <input
+                  required
+                  name="whatsAppNumber"
+                  placeholder="Phone (WhatsApp)"
+                  autoComplete="tel"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <select
+                  required
+                  name="dayType"
+                  defaultValue="weekdays"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-white/20"
+                >
+                  <option value="weekdays">Weekday (7–9 PM IST)</option>
+                  <option value="weekend">Weekend (10 AM–12 PM IST)</option>
                 </select>
-                <textarea placeholder="Tell us why you’re joining (optional)" className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm h-28 outline-none focus:ring-2 focus:ring-white/20" />
-                <button type="submit" className="rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold hover:bg-white/90">Submit application</button>
+                <textarea
+                  name="summary"
+                  placeholder="Tell us why you’re joining (optional)"
+                  className="w-full rounded-xl bg-neutral-800 border border-white/10 px-4 py-3 text-sm h-28 outline-none focus:ring-2 focus:ring-white/20"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-2xl bg-white px-6 py-3 font-semibold hover:bg-white/90 [color:#747bff] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit application"}
+                </button>
+                {submitStatus && (
+                  <p
+                    role="status"
+                    aria-live="polite"
+                    className={`text-xs ${
+                      submitStatus.type === "success"
+                        ? "text-emerald-300"
+                        : "text-rose-300"
+                    }`}
+                  >
+                    {submitStatus.message}
+                  </p>
+                )}
                 <p className="text-xs text-white/60">By submitting, you agree to our terms and consent to be contacted via WhatsApp/Email.</p>
               </form>
             </div>
@@ -333,14 +456,23 @@ export default function DesignXStudentLanding() {
           <h2 className="text-3xl md:text-4xl font-extrabold">Your design career starts now</h2>
           <p className="mt-3 text-white/80">Join the {eventDate.start} cohort and build a portfolio that opens doors.</p>
           <div className="mt-6 flex items-center justify-center gap-3">
-            <a href="#apply" className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold hover:bg-white/90">Apply now</a>
-            <a href="#syllabus" className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">Get syllabus</a>
+            <a onClick={(e) => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl bg-white text-neutral-900 px-6 py-3 font-semibold hover:bg-white/90 a-link">Apply now</a>
+            <a onClick={(e) => navigateTo('apply')} className="inline-flex justify-center items-center rounded-2xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10 a-link">Get syllabus</a>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 bg-neutral-950/80">
+      {/* <div className="flex justify-center items-center my-10">
+        <div className="relative">
+        <InstagramEmbed />
+        <div className="chatgpt-icon absolute bottom-[5px] right-[-50px]">
+          <ChatGptIcon />
+        </div>
+        </div>
+      </div> */}
+
+      
+      <footer className="border-t border-white/10 bg-neutral-950/80" id="footer">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-white/70">
           <div className="grid md:grid-cols-4 gap-6">
             <div>
@@ -369,8 +501,12 @@ export default function DesignXStudentLanding() {
             </div>
             <div>
               <p className="text-white font-semibold">Contact</p>
-              <p className="mt-2 text-white/70">hello@designxskool.com</p>
-              <p className="text-white/70">+91‑90030‑20030</p>
+              <p className="mt-2 text-white/70">hi@designxskool.com</p>
+              <p className="text-white/70 mb-[5px]">+91‑90030‑20030</p>
+              <a href="https://www.instagram.com/designx_india/" className="flex items-center">
+                <img src={instagramImg} alt="Instagram" className="w-[20px] h-[20px]" />
+                <span className="ml-[5px]">Instagram</span>
+              </a>
             </div>
           </div>
           <p className="mt-8 text-xs text-white/50">© {new Date().getFullYear()} DesignX Skool. All rights reserved.</p>

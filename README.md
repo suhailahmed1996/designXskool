@@ -76,10 +76,63 @@ src/
 
 ## 🚀 Deployment
 
-Build the project for production:
+### Netlify Deployment
 
+This project is configured for Netlify deployment with serverless functions.
+
+#### Prerequisites
+1. A Netlify account
+2. MongoDB database (MongoDB Atlas recommended for production)
+
+#### Steps to Deploy
+
+1. **Build the project locally (optional, for testing):**
 ```bash
 npm run build
+```
+
+2. **Set up environment variables in Netlify:**
+   - Go to your Netlify site dashboard
+   - Navigate to Site settings → Environment variables
+   - Add `MONGO_URI` with your MongoDB connection string
+   - Example: `mongodb+srv://username:password@cluster.mongodb.net/design-codex`
+
+3. **Deploy to Netlify:**
+   - Connect your repository to Netlify
+   - Netlify will automatically detect the `netlify.toml` configuration
+   - The build command `npm run build` will run automatically
+   - Functions will be deployed from `netlify/functions/`
+
+#### Project Structure for Netlify
+
+```
+netlify/
+└── functions/
+    └── server/
+        ├── server.js      # Express serverless function
+        └── package.json   # Function dependencies
+```
+
+#### API Endpoints
+
+- `POST /api/students` - Submit student application
+- `GET /api/students` - Get all students (for admin use)
+- `GET /api/hello` - Health check endpoint
+
+The frontend automatically uses `/api/students` which is redirected to the Netlify function via `netlify.toml`.
+
+#### Local Development
+
+For local development with the server:
+
+```bash
+# Terminal 1: Start the Express server
+cd server
+npm install
+npm start
+
+# Terminal 2: Start the Vite dev server
+npm run dev
 ```
 
 The built files will be in the `dist` directory, ready for deployment to any static hosting service.
