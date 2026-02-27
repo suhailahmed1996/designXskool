@@ -71,7 +71,7 @@ export default function DesignXStudentLanding() {
 
       const tryPlay = async () => {
         try {
-          v.muted = false;
+          v.muted = true;
           // Calling play again in case the browser paused when unmuted
           await v.play();
         } catch (error) {
